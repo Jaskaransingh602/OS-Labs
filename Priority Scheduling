@@ -1,0 +1,41 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+
+    int bt[100], pr[100];
+    for(int i=0;i<n;i++) cin >> bt[i] >> pr[i];
+
+    // Sort by priority
+    for(int i=0;i<n-1;i++){
+        int idx = i;
+        for(int j=i+1;j<n;j++){
+            if(pr[j] < pr[idx])
+                idx = j;
+        }
+        swap(pr[i], pr[idx]);
+        swap(bt[i], bt[idx]);
+    }
+
+    int ct[100], tat[100], wt[100];
+    int time = 0;
+
+    for(int i=0;i<n;i++){
+        time += bt[i];
+        ct[i] = time;
+        tat[i] = ct[i];       // AT = 0
+        wt[i]  = tat[i] - bt[i];
+    }
+
+    cout << "P\tBT\tPR\tCT\tTAT\tWT\n";
+    for(int i=0;i<n;i++){
+        cout << "P" << i << "\t"
+             << bt[i] << "\t"
+             << pr[i] << "\t"
+             << ct[i] << "\t"
+             << tat[i] << "\t"
+             << wt[i] << "\n";
+    }
+}
