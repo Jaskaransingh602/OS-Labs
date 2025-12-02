@@ -5,30 +5,39 @@ int main() {
     int n;
     cin >> n;
 
-    int bt[100];
-    for(int i=0;i<n;i++) cin >> bt[i];
-
-    // Sort by BT
-    for(int i=0;i<n-1;i++){
-        for(int j=i+1;j<n;j++){
-            if(bt[j] < bt[i])
-                swap(bt[i], bt[j]);
-        }
-    }
+    int at[100], bt[100], done[100]={0};
+    for(int i=0;i<n;i++) cin >> at[i] >> bt[i];
 
     int ct[100], tat[100], wt[100];
-    int time = 0;
+    int time = 0, completed = 0;
 
-    for(int i=0;i<n;i++){
-        time += bt[i];
-        ct[i] = time;
-        tat[i] = ct[i];          // AT = 0
-        wt[i]  = tat[i] - bt[i];
+    while(completed < n){
+        int idx = -1, mn = 1e9;
+
+        for(int i=0;i<n;i++){
+            if(!done[i] && at[i] <= time && bt[i] < mn){
+                mn = bt[i];
+                idx = i;
+            }
+        }
+
+        if(idx == -1){
+            time++;
+            continue;
+        }
+
+        time += bt[idx];
+        ct[idx] = time;
+        tat[idx] = ct[idx] - at[idx];
+        wt[idx] = tat[idx] - bt[idx];
+        done[idx] = 1;
+        completed++;
     }
 
-    cout << "P\tBT\tCT\tTAT\tWT\n";
+    cout << "P\tAT\tBT\tCT\tTAT\tWT\n";
     for(int i=0;i<n;i++){
         cout << "P" << i << "\t"
+             << at[i] << "\t"
              << bt[i] << "\t"
              << ct[i] << "\t"
              << tat[i] << "\t"
